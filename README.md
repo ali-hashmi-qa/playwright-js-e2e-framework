@@ -29,26 +29,27 @@ npx playwright install
 
 ## Run Tests
 
-`npm test` is an alias for `npx playwright test`. Both read `playwright.config.js` and run specs under `tests/`. Prefer the npm scripts in this README and in CI.
+`npm test` is an alias for `npx playwright test --project=chromium`. Prefer npm scripts in this README and in CI.
 
 ```bash
-npm test                 # headless (default)
-npm run test:headed      # headed browser
-npm run test:debug       # Playwright Inspector
-```
-
-Equivalent CLI (same engine):
-
-```bash
-npx playwright test
-npx playwright test --headed
-npx playwright test --debug
+npm test                 # Chromium, headless
+npm run test:headed      # Chromium, headed
+npm run test:debug       # Chromium, Playwright Inspector
+npm run test:firefox     # Firefox
+npm run test:webkit      # WebKit
+npm run test:browsers    # Chromium + Firefox + WebKit
 ```
 
 HTML report (generated after a run):
 
 ```bash
 npx playwright show-report
+```
+
+On failure, Playwright writes screenshot, video, and trace under `test-results/`. Open a trace:
+
+```bash
+npx playwright show-trace test-results/<path-to-trace.zip>
 ```
 
 ---
@@ -62,7 +63,7 @@ playwright-js-e2e-framework/
 ├── config/                # environment configuration (next commits)
 ├── tests/
 │   └── smoke/
-│       └── homepage.spec.js
+│       └── loginPage.spec.js
 ├── playwright.config.js
 ├── package.json
 └── README.md
@@ -76,10 +77,27 @@ playwright-js-e2e-framework/
 
 ---
 
+## Browsers
+
+`playwright.config.js` defines three projects:
+
+| Project name | Device preset | Engine |
+|---|---|---|
+| `chromium` | Desktop Chrome | Chromium |
+| `firefox` | Desktop Firefox | Firefox |
+| `webkit` | Desktop Safari | WebKit |
+
+Default scripts use Chromium. Cross-browser: `npm run test:browsers`.
+
+---
+
 ## Scripts
 
 | Script | What it runs |
 |---|---|
-| `npm test` | `playwright test` — headless Chromium |
-| `npm run test:headed` | `playwright test --headed` |
-| `npm run test:debug` | `playwright test --debug` |
+| `npm test` | Chromium, headless |
+| `npm run test:headed` | Chromium, headed |
+| `npm run test:debug` | Chromium, Inspector |
+| `npm run test:firefox` | Firefox |
+| `npm run test:webkit` | WebKit |
+| `npm run test:browsers` | All three browsers |
