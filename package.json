@@ -4,9 +4,12 @@
   "description": "Playwright JavaScript end-to-end automation framework using the Sauce Demo application.",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test",
-    "test:headed": "playwright test --headed",
-    "test:debug": "playwright test --debug"
+    "test": "playwright test --project=chromium",
+    "test:headed": "playwright test --project=chromium --headed",
+    "test:debug": "playwright test --project=chromium --debug",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:browsers": "playwright test"
   },
   "keywords": [
     "playwright",
