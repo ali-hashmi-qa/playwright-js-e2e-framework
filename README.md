@@ -58,16 +58,44 @@ npx playwright show-trace test-results/<path-to-trace.zip>
 
 ```text
 playwright-js-e2e-framework/
-├── pages/                 # page objects (next commits)
+├── pages/
+│   ├── BasePage.js         # shared goto / title
+│   ├── LoginPage.js        # login form
+│   └── InventoryPage.js    # product list after login
 ├── lib/                   # fixtures and shared helpers (next commits)
 ├── config/                # environment configuration (next commits)
 ├── tests/
-│   └── smoke/
-│       └── loginPage.spec.js
+│   ├── smoke/
+│   │   └── loginForm.spec.js
+│   └── auth/
+│       └── login.spec.js
 ├── playwright.config.js
 ├── package.json
 └── README.md
 ```
+
+---
+
+## Page Objects
+
+Tests describe behavior. Locators live in `pages/`.
+
+```javascript
+// tests do this
+await loginPage.login(username, password);
+await inventoryPage.expectLoaded();
+
+// tests do not do this
+await page.locator('#user-name').fill(username);
+```
+
+| Class | File | Role |
+|---|---|---|
+| `BasePage` | `pages/BasePage.js` | Shared `goto` / `title` |
+| `LoginPage` | `pages/LoginPage.js` | Login form |
+| `InventoryPage` | `pages/InventoryPage.js` | Product list after login |
+
+Page objects are constructed in the spec (`new LoginPage(page)`). Commit 04 will inject them with custom fixtures.
 
 ---
 
@@ -101,3 +129,20 @@ Default scripts use Chromium. Cross-browser: `npm run test:browsers`.
 | `npm run test:firefox` | Firefox |
 | `npm run test:webkit` | WebKit |
 | `npm run test:browsers` | All three browsers |
+
+---
+
+## Run It
+
+```bash
+npm test
+npm run test:headed
+```
+
+`npm test` is Chromium only. You should see:
+
+- smoke → homepage
+- auth → successful login
+- auth → invalid password
+
+Three tests, all via POM.
