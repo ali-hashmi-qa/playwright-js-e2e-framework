@@ -1,8 +1,6 @@
-import { test } from '@playwright/test';
-import { LoginPage } from '../../pages/LoginPage.js';
+import { test } from '../../lib/fixtures.js';
 
-test('homepage displays the Sauce Demo login form', async ({ page }) => {
-  const loginPage = new LoginPage(page);
+test('homepage displays the Sauce Demo login form', async ({ loginPage }) => {
   await loginPage.goto();
   await loginPage.expectLoaded();
 });
