@@ -99,6 +99,29 @@ Page objects are constructed in the spec (`new LoginPage(page)`). Commit 04 will
 
 ---
 
+## Fixtures
+
+Specs import `test` from `lib/fixtures.js`, not from `@playwright/test`. Custom fixtures build page objects and inject them into the test.
+
+```javascript
+import { test } from '../../lib/fixtures.js';
+
+test('standard user reaches inventory', async ({ loginPage, inventoryPage }) => {
+  await loginPage.goto();
+  await loginPage.login(username, password);
+  await inventoryPage.expectLoaded();
+});
+```
+
+| Fixture | Provides |
+|---|---|
+| `loginPage` | `new LoginPage(page)` |
+| `inventoryPage` | `new InventoryPage(page)` |
+
+Built-in fixtures such as `page` and `context` still work.
+
+---
+
 ## Application Under Test
 
 [https://www.saucedemo.com/](https://www.saucedemo.com/)
@@ -141,8 +164,12 @@ npm run test:headed
 
 `npm test` is Chromium only. You should see:
 
-- smoke → homepage
+- smoke → login form
 - auth → successful login
 - auth → invalid password
 
 Three tests, all via POM.
+
+Same 3 tests, 1 worker. Behavior is unchanged; construction moved into fixtures.
+
+If you see `loginPage is not defined` or a fixture error, the spec is still importing `test` from `@playwright/test` instead of `lib/fixtures.js`.
