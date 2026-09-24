@@ -2,14 +2,16 @@
   "name": "playwright-js-e2e-framework",
   "version": "1.0.0",
   "description": "Playwright JavaScript end-to-end automation framework using the Sauce Demo application.",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test --project=chromium",
-    "test:headed": "playwright test --project=chromium --headed",
-    "test:debug": "playwright test --project=chromium --debug",
-    "test:firefox": "playwright test --project=firefox",
-    "test:webkit": "playwright test --project=webkit",
-    "test:browsers": "playwright test"
+    "test": "cross-env ENV=qa playwright test --project=chromium",
+    "test:staging": "cross-env ENV=staging playwright test --project=chromium",
+    "test:headed": "cross-env ENV=qaa playwright test --project=chromium --headed",
+    "test:debug": "cross-env ENV=qa playwright test --project=chromium --debug",
+    "test:firefox": "cross-env ENV=qa playwright test --project=firefox",
+    "test:webkit": "cross-env ENV=qa playwright test --project=webkit",
+    "test:browsers": "cross-env ENV=qa playwright test"
   },
   "keywords": [
     "playwright",
@@ -21,6 +23,8 @@
   "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.63.0",
-    "@types/node": "^26.5.1"
+    "@types/node": "^26.5.1",
+    "cross-env": "^10.1.0",
+    "dotenv": "^18.0.3"
   }
 }

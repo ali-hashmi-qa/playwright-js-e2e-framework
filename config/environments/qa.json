@@ -1,0 +1,6 @@
+{
+    "name": "qa",
+    "baseURL": "https://www.saucedemo.com",
+    "timeout": 30000,
+    "expectTimeout": 5000
+}

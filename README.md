@@ -122,6 +122,28 @@ Built-in fixtures such as `page` and `context` still work.
 
 ---
 
+## Environments
+
+`baseURL` and timeouts live in JSON. They are not hardcoded in tests.
+
+| ENV | File | Typical use |
+|---|---|---|
+| `qa` (default) | `config/environments/qa.json` | Local and CI smoke |
+| `staging` | `config/environments/staging.json` | Pre-prod |
+
+```bash
+npm test                 # ENV=qa
+npm run test:staging     # ENV=staging
+```
+
+Copy `.env.example` to `.env` for a local default. `.env` is gitignored.
+
+Sauce Demo exposes one public host, so QA and staging URLs match. In a real product those files would point at different servers.
+
+`config/loadConfig.js` reads `process.env.ENV`, validates it, and loads the matching JSON. `playwright.config.js` uses `config.baseURL`.
+
+---
+
 ## Application Under Test
 
 [https://www.saucedemo.com/](https://www.saucedemo.com/)
@@ -173,3 +195,17 @@ Three tests, all via POM.
 Same 3 tests, 1 worker. Behavior is unchanged; construction moved into fixtures.
 
 If you see `loginPage is not defined` or a fixture error, the spec is still importing `test` from `@playwright/test` instead of `lib/fixtures.js`.
+
+```bash
+npm run test:staging
+```
+
+Both `npm test` and `npm run test:staging` should pass. Staging may just feel slightly more patient on `expect`.
+
+Broken env check:
+
+```bash
+cross-env ENV=prod npm test
+```
+
+This should print the unknown-ENV message and exit without running tests.

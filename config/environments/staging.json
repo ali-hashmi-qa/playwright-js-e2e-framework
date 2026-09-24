@@ -1,0 +1,6 @@
+{
+    "name": "staging",
+    "baseURL": "https://www.saucedemo.com",
+    "timeout": 45000,
+    "expectTimeout": 7000
+}
