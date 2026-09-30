@@ -11,7 +11,12 @@
     "test:debug": "cross-env ENV=qa playwright test --project=chromium --debug",
     "test:firefox": "cross-env ENV=qa playwright test --project=firefox",
     "test:webkit": "cross-env ENV=qa playwright test --project=webkit",
-    "test:browsers": "cross-env ENV=qa playwright test"
+    "test:browsers": "cross-env ENV=qa playwright test",
+    "test:sanity": "cross-env ENV=qa playwright test --project=chromium --grep @sanity",
+    "test:smoke": "cross-env ENV=qa playwright test --project=chromium --grep @smoke",
+    "test:critical": "cross-env ENV=qa playwright test --project=chromium --grep @critical",
+    "test:auth": "cross-env ENV=qa playwright test --project=chromium --grep @auth",
+    "test:regression": "cross-env ENV=qa playwright test --project=chromium --grep @regression"
   },
   "keywords": [
     "playwright",

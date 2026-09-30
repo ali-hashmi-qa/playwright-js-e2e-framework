@@ -59,16 +59,26 @@ npx playwright show-trace test-results/<path-to-trace.zip>
 ```text
 playwright-js-e2e-framework/
 ├── pages/
-│   ├── BasePage.js         # shared goto / title
-│   ├── LoginPage.js        # login form
-│   └── InventoryPage.js    # product list after login
-├── lib/                   # fixtures and shared helpers (next commits)
-├── config/                # environment configuration (next commits)
+│   ├── BasePage.js              # shared goto / title
+│   ├── LoginPage.js             # login form
+│   └── InventoryPage.js         # product list after login
+├── lib/
+│   ├── fixtures.js              # custom test fixtures (injects page objects)
+│   └── testData.js              # loads test-data/*.json
+├── config/
+│   ├── loadConfig.js            # reads process.env.ENV, validates, loads JSON
+│   └── environments/
+│       ├── qa.json              # baseURL / timeouts for qa
+│       └── staging.json         # baseURL / timeouts for staging
+├── test-data/
+│   ├── users.json               # named accounts (standard, locked)
+│   └── loginData.json           # one object per login test, with tags
 ├── tests/
 │   ├── smoke/
 │   │   └── loginForm.spec.js
 │   └── auth/
 │       └── login.spec.js
+├── .env.example                 # local ENV default (copy to .env, gitignored)
 ├── playwright.config.js
 ├── package.json
 └── README.md
@@ -164,12 +174,12 @@ Default scripts use Chromium. Cross-browser: `npm run test:browsers`.
 
 ---
 
-## Data-driven tests
+## Data-Driven Tests
 
 Login cases live in JSON, not in duplicated specs.
 
 | File | Role |
-| --- | --- |
+|---|---|
 | `test-data/users.json` | Named accounts (`standard`, `locked`) |
 | `test-data/loginData.json` | One object per login test |
 | `lib/testData.js` | Loads those files |
@@ -180,16 +190,43 @@ Add a case by adding a JSON object — do not copy the spec.
 
 ---
 
+## Tags and Profiles
+
+Tests are grouped by folder (`tests/smoke`, `tests/auth`) and selected by tag.
+
+| Tag | Run | What it covers |
+|---|---|---|
+| `@sanity` | `npm run test:sanity` | Login page loads |
+| `@smoke` | `npm run test:smoke` | Page load, valid login, invalid password |
+| `@critical` | `npm run test:critical` | Valid login, locked user |
+| `@auth` | `npm run test:auth` | All login cases |
+| `@regression` | `npm run test:regression` | Full Chromium suite |
+
+```bash
+npm run test:smoke
+npx playwright test --project=chromium --grep @smoke
+```
+
+Tags are set with Playwright's tag option, not by stuffing `@smoke` into the title. Login rows store tags in `test-data/loginData.json`. The Login describe adds `@auth` to every row in that file.
+
+---
+
 ## Scripts
 
 | Script | What it runs |
 |---|---|
-| `npm test` | Chromium, headless |
+| `npm test` | Chromium, headless, ENV=qa |
 | `npm run test:headed` | Chromium, headed |
 | `npm run test:debug` | Chromium, Inspector |
 | `npm run test:firefox` | Firefox |
 | `npm run test:webkit` | WebKit |
-| `npm run test:browsers` | All three browsers |
+| `npm run test:browsers` | Chromium + Firefox + WebKit |
+| `npm run test:staging` | Chromium, ENV=staging |
+| `npm run test:sanity` | `@sanity` — login page loads |
+| `npm run test:smoke` | `@smoke` — page load, valid login, invalid password |
+| `npm run test:critical` | `@critical` — valid login, locked user |
+| `npm run test:auth` | `@auth` — all login cases |
+| `npm run test:regression` | `@regression` — full Chromium suite |
 
 ---
 
@@ -200,23 +237,21 @@ npm test
 npm run test:headed
 ```
 
-`npm test` is Chromium only. You should see:
+`npm test` runs the full Chromium suite (smoke + auth): the login form loads, and each `loginData.json` row runs as its own test (valid login, invalid password, invalid username, empty username, empty password, locked user). Page objects are constructed via fixtures, so `loginPage` and `inventoryPage` are injected — no manual `new LoginPage(page)` in the specs. If you see `loginPage is not defined` or a fixture error, the spec is still importing `test` from `@playwright/test` instead of `lib/fixtures.js`.
 
-- smoke → login form
-- auth → successful login
-- auth → invalid password
-
-Three tests, all via POM.
-
-Same 3 tests, 1 worker. Behavior is unchanged; construction moved into fixtures.
-
-If you see `loginPage is not defined` or a fixture error, the spec is still importing `test` from `@playwright/test` instead of `lib/fixtures.js`.
+Tag and environment checks:
 
 ```bash
+npm run test:smoke
+npm run test:auth
+npm run test:regression
 npm run test:staging
 ```
 
-Both `npm test` and `npm run test:staging` should pass. Staging may just feel slightly more patient on `expect`.
+- Smoke → 3 passed
+- Auth → 6 passed (does not include the login form / smoke test)
+- Regression → 7 passed
+- Staging → same suite passes; may just feel slightly more patient on `expect`
 
 Broken env check:
 

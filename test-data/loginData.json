@@ -2,12 +2,21 @@
     {
         "id": "valid-user",
         "title": "valid user reaches inventory",
+        "tags": [
+            "@smoke",
+            "@regression",
+            "@critical"
+        ],
         "user": "standard",
         "outcome": "success"
     },
     {
         "id": "invalid-password",
         "title": "invalid password shows an error",
+        "tags": [
+            "@smoke",
+            "@regression"
+        ],
         "user": "standard",
         "password": "wrong_password",
         "outcome": "error",
@@ -16,6 +25,9 @@
     {
         "id": "invalid-username",
         "title": "invalid username shows an error",
+        "tags": [
+            "@regression"
+        ],
         "user": "standard",
         "username": "not_a_user",
         "outcome": "error",
@@ -24,6 +36,9 @@
     {
         "id": "empty-username",
         "title": "empty username shows an error",
+        "tags": [
+            "@regression"
+        ],
         "user": "standard",
         "username": "",
         "outcome": "error",
@@ -32,6 +47,9 @@
     {
         "id": "empty-password",
         "title": "empty password shows an error",
+        "tags": [
+            "@regression"
+        ],
         "user": "standard",
         "password": "",
         "outcome": "error",
@@ -40,6 +58,10 @@
     {
         "id": "locked-user",
         "title": "locked user sees a locked-out error",
+        "tags": [
+            "@regression",
+            "@critical"
+        ],
         "user": "locked",
         "outcome": "error",
         "errorText": "Sorry, this user has been locked out"
