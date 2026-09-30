@@ -1,19 +1,31 @@
 import { test } from '../../lib/fixtures.js';
+import { loadTestData } from '../../lib/testData.js';
 
-const VALID_USER = 'standard_user';
-const VALID_PASSWORD = 'secret_sauce';
-const INVALID_PASSWORD = 'wrong_password';
+const users = loadTestData('users.json');
+const loginCases = loadTestData('loginData.json');
+
+function credentialsFor(testCase) {
+  const baseUser = users[testCase.user];
+
+  return {
+    username: Object.hasOwn(testCase, 'username') ? testCase.username : baseUser.username,
+    password: Object.hasOwn(testCase, 'password') ? testCase.password : baseUser.password,
+  };
+}
 
 test.describe('Login', () => {
-    test('standard user reaches inventory', async ({ loginPage, inventoryPage }) => {
-        await loginPage.goto();
-        await loginPage.login(VALID_USER, VALID_PASSWORD);
-        await inventoryPage.expectLoaded();
-    });
+  for (const testCase of loginCases) {
+    test(testCase.title, async ({ loginPage, inventoryPage }) => {
+      const { username, password } = credentialsFor(testCase);
 
-    test('invalid password shows an error', async ({ loginPage }) => {
-        await loginPage.goto();
-        await loginPage.login(VALID_USER, INVALID_PASSWORD);
-        await loginPage.expectErrorContains('Username and password do not match');
+      await loginPage.goto();
+      await loginPage.login(username, password);
+
+      if (testCase.outcome === 'success') {
+        await inventoryPage.expectLoaded();
+      } else {
+        await loginPage.expectErrorContains(testCase.errorText);
+      }
     });
+  }
 });

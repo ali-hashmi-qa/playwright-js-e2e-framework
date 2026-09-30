@@ -1,0 +1,47 @@
+[
+    {
+        "id": "valid-user",
+        "title": "valid user reaches inventory",
+        "user": "standard",
+        "outcome": "success"
+    },
+    {
+        "id": "invalid-password",
+        "title": "invalid password shows an error",
+        "user": "standard",
+        "password": "wrong_password",
+        "outcome": "error",
+        "errorText": "Username and password do not match"
+    },
+    {
+        "id": "invalid-username",
+        "title": "invalid username shows an error",
+        "user": "standard",
+        "username": "not_a_user",
+        "outcome": "error",
+        "errorText": "Username and password do not match"
+    },
+    {
+        "id": "empty-username",
+        "title": "empty username shows an error",
+        "user": "standard",
+        "username": "",
+        "outcome": "error",
+        "errorText": "Username is required"
+    },
+    {
+        "id": "empty-password",
+        "title": "empty password shows an error",
+        "user": "standard",
+        "password": "",
+        "outcome": "error",
+        "errorText": "Password is required"
+    },
+    {
+        "id": "locked-user",
+        "title": "locked user sees a locked-out error",
+        "user": "locked",
+        "outcome": "error",
+        "errorText": "Sorry, this user has been locked out"
+    }
+]
