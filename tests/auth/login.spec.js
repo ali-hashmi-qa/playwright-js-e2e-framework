@@ -13,9 +13,9 @@ function credentialsFor(testCase) {
   };
 }
 
-test.describe('Login', () => {
+test.describe('Login', { tag: '@auth' }, () => {
   for (const testCase of loginCases) {
-    test(testCase.title, async ({ loginPage, inventoryPage }) => {
+    test(testCase.title, { tag: testCase.tags }, async ({ loginPage, inventoryPage }) => {
       const { username, password } = credentialsFor(testCase);
 
       await loginPage.goto();
