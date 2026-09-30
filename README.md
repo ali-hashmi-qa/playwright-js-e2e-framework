@@ -164,6 +164,22 @@ Default scripts use Chromium. Cross-browser: `npm run test:browsers`.
 
 ---
 
+## Data-driven tests
+
+Login cases live in JSON, not in duplicated specs.
+
+| File | Role |
+| --- | --- |
+| `test-data/users.json` | Named accounts (`standard`, `locked`) |
+| `test-data/loginData.json` | One object per login test |
+| `lib/testData.js` | Loads those files |
+
+`tests/auth/login.spec.js` loops `loginData.json` and registers one test per row (valid, invalid password, invalid username, empty username, empty password, locked user).
+
+Add a case by adding a JSON object — do not copy the spec.
+
+---
+
 ## Scripts
 
 | Script | What it runs |

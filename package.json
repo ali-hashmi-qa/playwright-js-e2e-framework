@@ -7,7 +7,7 @@
   "scripts": {
     "test": "cross-env ENV=qa playwright test --project=chromium",
     "test:staging": "cross-env ENV=staging playwright test --project=chromium",
-    "test:headed": "cross-env ENV=qaa playwright test --project=chromium --headed",
+    "test:headed": "cross-env ENV=qa playwright test --project=chromium --headed",
     "test:debug": "cross-env ENV=qa playwright test --project=chromium --debug",
     "test:firefox": "cross-env ENV=qa playwright test --project=firefox",
     "test:webkit": "cross-env ENV=qa playwright test --project=webkit",
