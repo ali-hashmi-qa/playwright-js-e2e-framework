@@ -1,4 +1,4 @@
-import { expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { BasePage } from './BasePage.js';
 
 export class InventoryPage extends BasePage {
@@ -10,8 +10,10 @@ export class InventoryPage extends BasePage {
   }
 
   async expectLoaded() {
-    await expect(this.page).toHaveURL(/.*inventory\.html/);
-    await expect(this.title).toHaveText('Products');
-    await expect(this.inventoryList).toBeVisible();
+    await test.step('Inventory page is loaded', async () => {
+      await expect(this.page).toHaveURL(/.*inventory\.html/);
+      await expect(this.title).toHaveText('Products');
+      await expect(this.inventoryList).toBeVisible();
+    });
   }
 }

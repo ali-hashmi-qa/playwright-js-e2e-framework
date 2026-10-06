@@ -5,18 +5,22 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env ENV=qa playwright test --project=chromium",
-    "test:staging": "cross-env ENV=staging playwright test --project=chromium",
-    "test:headed": "cross-env ENV=qa playwright test --project=chromium --headed",
-    "test:debug": "cross-env ENV=qa playwright test --project=chromium --debug",
-    "test:firefox": "cross-env ENV=qa playwright test --project=firefox",
-    "test:webkit": "cross-env ENV=qa playwright test --project=webkit",
-    "test:browsers": "cross-env ENV=qa playwright test",
-    "test:sanity": "cross-env ENV=qa playwright test --project=chromium --grep @sanity",
-    "test:smoke": "cross-env ENV=qa playwright test --project=chromium --grep @smoke",
-    "test:critical": "cross-env ENV=qa playwright test --project=chromium --grep @critical",
-    "test:auth": "cross-env ENV=qa playwright test --project=chromium --grep @auth",
-    "test:regression": "cross-env ENV=qa playwright test --project=chromium --grep @regression"
+    "allure:clean": "node scripts/cleanAllure.js",
+    "test": "npm run allure:clean && cross-env ENV=qa playwright test --project=chromium",
+    "test:staging": "npm run allure:clean && cross-env ENV=staging playwright test --project=chromium",
+    "test:headed": "npm run allure:clean && cross-env ENV=qa playwright test --project=chromium --headed",
+    "test:debug": "npm run allure:clean && cross-env ENV=qa playwright test --project=chromium --debug",
+    "test:firefox": "npm run allure:clean && cross-env ENV=qa playwright test --project=firefox",
+    "test:webkit": "npm run allure:clean && cross-env ENV=qa playwright test --project=webkit",
+    "test:browsers": "npm run allure:clean && cross-env ENV=qa playwright test",
+    "test:sanity": "npm run allure:clean && cross-env ENV=qa playwright test --project=chromium --grep @sanity",
+    "test:smoke": "npm run allure:clean && cross-env ENV=qa playwright test --project=chromium --grep @smoke",
+    "test:critical": "npm run allure:clean && cross-env ENV=qa playwright test --project=chromium --grep @critical",
+    "test:auth": "npm run allure:clean && cross-env ENV=qa playwright test --project=chromium --grep @auth",
+    "test:regression": "npm run allure:clean && cross-env ENV=qa playwright test --project=chromium --grep @regression",
+    "allure:serve": "allure serve allure-results",
+    "allure:report": "allure generate allure-results -o allure-report",
+    "allure:open": "allure open allure-report"
   },
   "keywords": [
     "playwright",
@@ -29,6 +33,8 @@
   "devDependencies": {
     "@playwright/test": "^1.63.0",
     "@types/node": "^26.5.1",
+    "allure": "^3.20.0",
+    "allure-playwright": "^3.13.0",
     "cross-env": "^10.1.0",
     "dotenv": "^18.0.3"
   }

@@ -17,3 +17,7 @@ node_modules/
 .idea/
 .vscode/
 *.log
+
+# Allure Reports
+/allure-results/
+/allure-report/

@@ -211,6 +211,35 @@ Tags are set with Playwright's tag option, not by stuffing `@smoke` into the tit
 
 ---
 
+## Allure Report
+
+Every test run writes Allure results and a Playwright HTML report.
+
+```bash
+npm run test:smoke
+npm run allure:serve
+```
+
+`npm run allure:serve` opens the report from `allure-results/`. Generate a static site instead:
+
+```bash
+npm run allure:report
+npm run allure:open
+```
+
+In a test, open **Steps**. `login()` is one step with nested steps for username, password, and the Login click.
+
+The **Environment** widget shows `Environment`, `BaseURL`, `Node`, and `OS`.
+
+On a failed test, the report attaches:
+
+- Playwright screenshot, video, and trace
+- `page-url-on-failure`, the URL open when the test stopped
+
+`allure-results/` and `allure-report/` are gitignored.
+
+---
+
 ## Scripts
 
 | Script | What it runs |
@@ -227,6 +256,9 @@ Tags are set with Playwright's tag option, not by stuffing `@smoke` into the tit
 | `npm run test:critical` | `@critical` — valid login, locked user |
 | `npm run test:auth` | `@auth` — all login cases |
 | `npm run test:regression` | `@regression` — full Chromium suite |
+| `npm run allure:serve` | Build + open the Allure report from `allure-results/` |
+| `npm run allure:report` | Generate a static Allure report into `allure-report/` |
+| `npm run allure:open` | Open the generated static Allure report |
 
 ---
 
@@ -260,3 +292,14 @@ cross-env ENV=prod npm test
 ```
 
 This should print the unknown-ENV message and exit without running tests.
+
+Allure check:
+
+```bash
+npm run test:smoke
+npm run allure:serve
+```
+
+Smoke should still be 3 passed. In the report, open the valid-login test and confirm the nested login steps. Open the overview and confirm the **Environment** block shows `qa` and `https://www.saucedemo.com`.
+
+To see a failure attachment, temporarily change the success check to `toHaveText('Wrong')`, run `npm run test:smoke`, and open the failed test. You should see the screenshot and `page-url-on-failure`. Restore the assertion before committing.
