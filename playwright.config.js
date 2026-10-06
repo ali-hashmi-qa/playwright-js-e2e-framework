@@ -1,4 +1,5 @@
 // @ts-check
+import os from 'os';
 import { defineConfig, devices } from '@playwright/test';
 import { config } from './config/loadConfig.js';
 
@@ -15,7 +16,26 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 2 : 1,
-  reporter: [['html', { open: 'never' }]],
+
+  reporter: [
+    ['line'],
+    ['html', { open: 'never' }],
+    [
+      'allure-playwright',
+      {
+        resultsDir: 'allure-results',
+        detail: true,
+        suiteTitle: false,
+        environmentInfo: {
+          Environment: config.env,
+          BaseURL: config.baseURL,
+          Node: process.version,
+          OS: `${os.platform()} ${os.release()}`,
+        },
+      },
+    ],
+  ],
+
   outputDir: 'test-results/',
 
   use: {
