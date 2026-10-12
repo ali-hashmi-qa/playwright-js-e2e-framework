@@ -337,3 +337,12 @@ npm run allure:serve
 Smoke should still be 3 passed. In the report, open the valid-login test and confirm the nested login steps. Open the overview and confirm the **Environment** block shows `qa` and `https://www.saucedemo.com`.
 
 To see a failure attachment, temporarily change the success check to `toHaveText('Wrong')`, run `npm run test:smoke`, and open the failed test. You should see the screenshot and `page-url-on-failure`. Restore the assertion before committing.
+
+---
+
+## 👤 Author & Contact
+
+**Ali Hashmi** | QA Automation Engineer
+
+- LinkedIn: [www.linkedin.com/in/syedali-hashmi](https://www.linkedin.com/in/syedali-hashmi)
+- Email: [hashmiali2000@gmail.com](mailto:hashmiali2000@gmail.com)
