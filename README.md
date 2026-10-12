@@ -1,5 +1,8 @@
 # Playwright JS E2E Framework
 
+[![Smoke](https://github.com/ali-hashmi-qa/playwright-js-e2e-framework/actions/workflows/ci.yml/badge.svg)](https://github.com/ali-hashmi-qa/playwright-js-e2e-framework/actions/workflows/ci.yml)
+[![Nightly](https://github.com/ali-hashmi-qa/playwright-js-e2e-framework/actions/workflows/nightly.yml/badge.svg)](https://github.com/ali-hashmi-qa/playwright-js-e2e-framework/actions/workflows/nightly.yml)
+
 Playwright + JavaScript end-to-end UI automation, demonstrated against [Sauce Demo](https://www.saucedemo.com/).
 
 This repo is built in small commits, the way an enterprise framework grows: project setup first, then page objects, fixtures, environment config, reporting, and CI.
@@ -237,6 +240,37 @@ On a failed test, the report attaches:
 - `page-url-on-failure`, the URL open when the test stopped
 
 `allure-results/` and `allure-report/` are gitignored.
+
+---
+
+## CI / GitHub Actions
+
+| Workflow | Trigger | Command |
+|---|---|---|
+| `ci.yml` | Pull request, push to `main` | `npm run test:smoke` |
+| `nightly.yml` | Daily 02:00 UTC, or manual | `npm run test:regression` |
+
+Each run installs Node 20, dependencies, and Chromium, then uploads:
+
+- Playwright HTML report
+- Allure report
+- `test-results/` on failure (screenshots, traces, video)
+
+Open a run → **Artifacts** → download `allure-report-*` → open `index.html`, or download `playwright-report-*` and run:
+
+```bash
+npx playwright show-report path/to/playwright-report
+```
+
+Nightly can also be started from the Actions tab → Nightly → Run workflow.
+
+**Branch name note:** if your default branch is not `main`, update the trigger in `ci.yml`:
+
+```yaml
+push:
+  branches:
+    - master
+```
 
 ---
 
